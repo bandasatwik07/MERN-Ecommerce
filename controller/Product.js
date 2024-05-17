@@ -15,8 +15,8 @@ exports.fetchAllProducts= async(req,res)=>{
     // filter ={category:["smartphones"]}
     // sort = {_sort:"price",_order="desc"}
     // pagination = {_page:1,_limit=10}
-    let query = Product.find({});
-    let totalProductsQuery= Product.find({});
+    let query = Product.find({deleted:{ $ne: true }});
+    let totalProductsQuery= Product.find({deleted:{$ne:true}});
 
     if(req.query.category){
         query = query.find({ category: req.query.category });
@@ -59,6 +59,7 @@ exports.fetchProductById= async(req,res)=>{
 
 exports.updateProduct= async(req,res)=>{
     try{
+        // console.log(req.params.id);
         const doc= await Product.findByIdAndUpdate(req.params.id, req.body, {new:true} );
         res.status(200).json(doc);
     }catch(err){
